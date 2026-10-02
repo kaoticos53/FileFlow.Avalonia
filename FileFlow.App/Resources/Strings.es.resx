@@ -793,6 +793,9 @@
   <data name="Zoom_FitBtn" xml:space="preserve"><value>Ajustar</value></data>
   <data name="Zoom_NoteBtn" xml:space="preserve"><value>Nota</value></data>
   <data name="Zoom_GroupBtn" xml:space="preserve"><value>Grupo</value></data>
+  <data name="Zoom_GridBtn" xml:space="preserve"><value>Cuadrícula</value></data>
+  <data name="Zoom_GridToolTip" xml:space="preserve"><value>Mostrar u ocultar cuadrícula de papel milimetrado</value></data>
+  <data name="ToggleGridBtn" xml:space="preserve"><value>Alternar Cuadrícula</value></data>
 
   <!-- Group Colors & Color Picker -->
   <data name="Color_Blue" xml:space="preserve"><value>Azul</value></data>

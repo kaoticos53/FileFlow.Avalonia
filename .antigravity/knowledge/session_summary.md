@@ -10,6 +10,22 @@ Este documento se actualiza al finalizar cada sesión de trabajo para consolidar
 ---
 
 ## 0. Hito más reciente
+- **215. Fondo de Papel Milimetrado Sutil para el Lienzo de Nodos (2026-10-02)**:
+  - **El encargo**: «me gustari que el fondo del lienzo donde se pintan los flujos con los nodos tubiera un aspecto asi como de papel milimetrado con un patron parecido al de la imagen que no destacara mucho.»
+  - **Diagnóstico y diseño**:
+    - Se analizó la imagen de referencia: el lienzo requería una cuadrícula sutil tipo ingeniería / papel milimetrado, compuesta por celdas uniformes de 25px alineadas con el ancho base de las tarjetas de nodos (200px) y guías principales cada 100px (4 subdivisiones).
+    - Para lograr que no destacara en exceso, se emplearon los tokens temáticos `GridLineBrush` y `BgEditorBrush`, aplicando opacidad diferenciada (85% para guías mayores y 40% atenuada para líneas menores), con atenuación dinámica de nivel de detalle (LOD) ante zoom alejado para prevenir efecto moiré.
+  - **Implementación**:
+    - Creado `GraphPaperGridControl` en `FileFlow.App/Views/Components/` derivado de `Control` con renderizado vectorial nativo directo (`DrawingContext.DrawLine`), sin asignaciones de memoria en bucle gracias al reciclaje de `Pen` cacheados, y soporte de paneo/zoom continuo mediante `AffectsRender`.
+    - Integrado en `EditorView.axaml` inmediatamente detrás de `NodifyCanvas`, con `IsHitTestVisible="False"` para no obstaculizar interacciones.
+    - Añadido comando `ToggleGridCommand` en `EditorViewModel.cs` y botones de alternancia en el menú contextual del lienzo y en la barra flotante de zoom (`EditorZoomBarView.axaml`).
+    - Añadidas cadenas i18n multilingües en `Strings.resx` y `Strings.es.resx`.
+  - **Validación**:
+    - Suite unitaria `GraphPaperGridControlTests.cs` (5/5 pruebas al 100%).
+    - Layout de editor `EditorViewLayoutTests.cs` (18/18 pruebas al 100%).
+    - Regresiones visuales `AppShellVisualRegressionTests.cs` actualizadas con `FILEFLOW_UPDATE_VISUALS=1` (12/12 al 100%).
+    - Suite global verde: 1.747 pruebas superadas, 0 errores.
+
 - **214. Blindaje de Permisos en C:\Program Files y Corrección del Instalador Windows en CI Release (2026-10-01)**:
   - **El encargo**: «la version para instalar al ejecutarla despues de instalarla me da estos errores presentes en el log: System.UnauthorizedAccessException: Access to the path 'C:\Program Files\FileFlow Studio\Plugins' is denied at PluginRegistryHelper.LoadPluginsDirectory. El instalador fue generado mediante la accion release en github por lo que deberias arreglar el problema tambien alli de por que se copio un binario antiguo.»
   - **Diagnóstico**:

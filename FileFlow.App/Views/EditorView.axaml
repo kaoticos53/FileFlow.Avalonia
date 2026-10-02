@@ -24,6 +24,13 @@
          flujo de energía) viven en Styles/Ports.axaml, compartidos con el resto de la UI. -->
 
     <Grid Background="{DynamicResource BgEditorBrush}">
+        <!-- Fondo de papel milimetrado del lienzo (Graph Paper Grid) -->
+        <components:GraphPaperGridControl ViewportLocation="{Binding ViewportLocation}"
+                                          ViewportZoom="{Binding ViewportZoom}"
+                                          GridLineBrush="{DynamicResource GridLineBrush}"
+                                          IsVisible="{Binding ShowGrid}"
+                                          IsHitTestVisible="False" />
+
         <!-- Nodify DAG Canvas -->
         <nodify:NodifyEditor x:Name="NodifyCanvas"
                              ItemsSource="{Binding Nodes}"
@@ -113,6 +120,13 @@
                               Command="{Binding FitToScreenCommand}">
                         <MenuItem.Icon>
                             <materialIcons:MaterialIcon  Kind="Magnify" Width="12" Height="12" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[ToggleGridBtn], FallbackValue='Alternar cuadrícula'}"
+                              Command="{Binding ToggleGridCommand}">
+                        <MenuItem.Icon>
+                            <materialIcons:MaterialIcon Kind="Grid" Width="12" Height="12" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>

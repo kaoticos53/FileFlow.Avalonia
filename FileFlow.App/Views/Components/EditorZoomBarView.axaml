@@ -68,6 +68,16 @@
                     <TextBlock Text="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[Zoom_GroupBtn]}" FontSize="{DynamicResource FontSizeMicro}" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
+
+            <!-- Toggle Grid Button -->
+            <Button Command="{Binding ToggleGridCommand}" 
+                    Padding="7,2" Height="24" CornerRadius="{DynamicResource RadiusXs}"
+                    ToolTip.Tip="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[Zoom_GridToolTip], FallbackValue='Alternar cuadrícula milimetrada'}">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <materialIcons:MaterialIcon VerticalAlignment="Center" Kind="Grid" Width="11" Height="11" />
+                    <TextBlock Text="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[Zoom_GridBtn], FallbackValue='Cuadrícula'}" FontSize="{DynamicResource FontSizeMicro}" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
     </Border>
 </UserControl>

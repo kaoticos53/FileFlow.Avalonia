@@ -122,6 +122,10 @@ public partial class EditorViewModel : ObservableObject, IDisposable
     [ObservableProperty]
     private bool _showGrid = true;
 
+    /// <summary>Alterna la visibilidad de la cuadrícula de papel milimetrado en el fondo del lienzo.</summary>
+    [RelayCommand]
+    private void ToggleGrid() => ShowGrid = !ShowGrid;
+
     /// <summary>
     /// Lo que la última acción dejó a medias y el usuario tiene que saber <b>aquí</b>, donde está el grafo y
     /// donde se puede arreglar: hoy, los cables que no se pudieron reconstruir al abrir un flujo, al pegar o

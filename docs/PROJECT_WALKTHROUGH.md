@@ -1,5 +1,40 @@
 # FileFlow Studio - Historial de Cambios y Registro de Implementación (Walkthrough)
 
+## [2026-10-02] - Fondo de Papel Milimetrado Sutil para el Lienzo de Nodos (Hito 215)
+
+### 🎯 Diagnóstico y Requerimiento del Usuario
+- **El encargo**: «me gustari que el fondo del lienzo donde se pintan los flujos con los nodos tubiera un aspecto asi como de papel milimetrado con un patron parecido al de la imagen que no destacara mucho.»
+- **Análisis**:
+  - En la imagen de referencia, el fondo del lienzo cuenta con un diseño de cuadrícula sutil tipo ingeniería / papel milimetrado, caracterizado por una grilla uniforme y elegante (subdivisiones de 25px alineadas con el ancho base de las tarjetas de nodos de 200px y guías mayores cada 100px / 4 subdivisiones).
+  - La implementación debía ser no intrusiva ("que no destacara mucho"), adaptarse automáticamente a cualquier tema de FileFlow (claro, oscuro, etc.) a través de los tokens existentes `GridLineBrush` y `BgEditorBrush`, y mantenerse 100% sincronizada con el paneo (`ViewportLocation`) y zoom (`ViewportZoom`) de `NodifyEditor` con rendimiento nativo a 60/144 FPS sin asignaciones de memoria en bucle de renderizado.
+
+### 🛠️ Implementación Técnica
+1. **Nuevo componente `GraphPaperGridControl` (`FileFlow.App/Views/Components/GraphPaperGridControl.cs`)**:
+   - Control personalizado de Avalonia 12 que hereda de `Control` y realiza renderizado vectorial acelerado directo mediante `DrawingContext.DrawLine`.
+   - Propiedades enlazables: `ViewportLocation`, `ViewportZoom`, `GridLineBrush`, `Background`, `CellSize` (25.0) y `MajorDivisions` (4).
+   - Registrado con `AffectsRender<GraphPaperGridControl>(...)` para re-renderizado automático ante cambios de posición, zoom o tema.
+   - Paneo y zoom fluido con coordenadas flotantes sin jitter ni saltos escalonados.
+   - Nivel de Detalle (LOD) dinámico: atenúa suavemente y oculta las líneas menores cuando el zoom se aleja excesivamente (`zoom < 0.5`), previniendo moiré y saturación visual.
+   - Caché determinista de `Pen` (`_cachedMajorPen` y `_cachedMinorPen`) para evitar asignaciones al recolector de basura (GC) durante el desplazamiento continuo del lienzo.
+   - `ClipToBounds = true` e `IsHitTestVisible = false` para no interferir en ningún gesto de ratón o atajo de teclado de Nodify.
+2. **Integración en el Lienzo (`FileFlow.App/Views/EditorView.axaml`)**:
+   - `GraphPaperGridControl` posicionado directamente detrás de `NodifyCanvas`, enlazando `ViewportLocation`, `ViewportZoom` y `{DynamicResource GridLineBrush}`.
+   - Opción agregada en el menú contextual del fondo libre del lienzo para alternar la cuadrícula (`ToggleGridCommand`).
+3. **Control y Telemetría en `EditorViewModel.cs` y Barra Flotante (`EditorZoomBarView.axaml`)**:
+   - Implementado el comando `[RelayCommand] ToggleGrid()` sobre la propiedad existente `ShowGrid`.
+   - Añadido botón con icono `Kind="Grid"` en `EditorZoomBarView.axaml` para alternar la visibilidad de la cuadrícula con un solo clic.
+   - Textos localizados en `Strings.resx` y `Strings.es.resx` (`Zoom_GridBtn`, `Zoom_GridToolTip`, `ToggleGridBtn`).
+4. **Actualización de Líneas Base Visuales (`AppShellVisualRegressionTests.cs`)**:
+   - Regeneradas las instantáneas de la interfaz y panel de editor (`app-shell-dark`, `app-shell-light`, `panel-editor-dark`) mediante `FILEFLOW_UPDATE_VISUALS=1` para reflejar el nuevo fondo de diseño.
+
+### 🧪 Validación
+- **Pruebas unitarias de componente (`GraphPaperGridControlTests.cs`)**: 5/5 pruebas superadas (propiedades por defecto, asignación personalizada, renderizado en layout, renderizado con coordenadas negativas/zooms extremos y alternancia del comando `ToggleGrid`).
+- **Pruebas de layout de editor (`EditorViewLayoutTests.cs`)**: 18/18 superadas al 100%.
+- **Pruebas de regresión visual (`AppShellVisualRegressionTests.cs`)**: 12/12 superadas al 100%.
+- **Suite completa de pruebas (`dotnet test FileFlow.slnx`)**: 1.747 pruebas superadas, 0 errores, 1 omitida deliberada de IA local.
+
+---
+
 ## [2026-10-01] - Blindaje de Permisos en C:\Program Files y Corrección del Instalador Windows en CI Release (Hito 214)
 
 ### 🎯 Diagnóstico y Causa Raíz
