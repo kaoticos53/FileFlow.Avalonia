@@ -10,6 +10,21 @@ Este documento se actualiza al finalizar cada sesión de trabajo para consolidar
 ---
 
 ## 0. Hito más reciente
+- **216. Consola de Depuración Plegable y Ocultable como el Panel de Inspección (2026-10-02)**:
+  - **El encargo**: «haz que la consola de depuracion se pueda esconder como el panel de inspeccion.»
+  - **Diagnóstico y diseño**:
+    - Se replicó el patrón arquitectónico del panel de inspección de datos (`NodeInspectorViewModel` + `NodeInspectorPanelView`), permitiendo que la consola de depuración/ejecución (`LogView`) pueda plegarse completamente (altura 0px y splitter oculto) para maximizar el espacio del lienzo de nodos.
+  - **Implementación**:
+    - `LogViewModel`: agregada propiedad reactiva `IsOpen` (por defecto `true`), y comandos `TogglePanel()`, `ClosePanel()` y `OpenPanel()`.
+    - `ControlBarViewModel` y `ControlBarView.axaml`: expuesta propiedad `LogConsole`, comando `ToggleConsoleCommand` y botón en la Isla 3 (Herramientas y Vistas) con icono `Console` y textos localizados (`[ConsoleBtn]`, `[ControlBar_ConsoleToolTip]`).
+    - `LogView.axaml`: incorporado botón de cierre en la barra de herramientas derecha (`ClosePanelCommand` con icono `Close` y tooltip `[Log_ClosePanelToolTip]`).
+    - `MainView.axaml`: fila 3 vinculada reactivamente con `BooleanToGridLengthConverter` a `LogConsole.IsOpen`, `GridSplitter` horizontal con `IsVisible="{Binding LogConsole.IsOpen}"`, y botón en el menú lateral desplegable (Drawer).
+    - Cadenas i18n multilingües agregadas en `Strings.resx` y `Strings.es.resx`.
+  - **Validación**:
+    - Pruebas unitarias de ViewModel (`LogConsoleViewModelTests.cs`, 7/7 al 100%).
+    - Pruebas de regresión visual actualizadas (`AppShellVisualRegressionTests.cs`, 12/12 al 100%).
+    - Suite global verde: 1.749 pruebas superadas, 0 errores, 1 omitida.
+
 - **215. Fondo de Papel Milimetrado Sutil para el Lienzo de Nodos (2026-10-02)**:
   - **El encargo**: «me gustari que el fondo del lienzo donde se pintan los flujos con los nodos tubiera un aspecto asi como de papel milimetrado con un patron parecido al de la imagen que no destacara mucho.»
   - **Diagnóstico y diseño**:

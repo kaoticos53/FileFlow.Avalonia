@@ -371,6 +371,7 @@
   <data name="StatusPausedError" xml:space="preserve"><value>Pausado por Error</value></data>
   <data name="CloseInspector" xml:space="preserve"><value>Cerrar Inspector</value></data>
   <data name="InspectorBtn" xml:space="preserve"><value>🔍 Inspector</value></data>
+  <data name="ConsoleBtn" xml:space="preserve"><value>💻 Consola</value></data>
 
   <data name="MenuBtn" xml:space="preserve"><value>Menú</value></data>
   <data name="WorkflowSettingsBtn" xml:space="preserve"><value>Ajustes del Flujo</value></data>
@@ -396,6 +397,7 @@
   <data name="Drawer_CustomizeThemeToolTip" xml:space="preserve"><value>Abrir el Estudio Gráfico de Personalización Visual de Temas</value></data>
   <data name="Drawer_PanelsTools" xml:space="preserve"><value>PANELES Y HERRAMIENTAS</value></data>
   <data name="Drawer_DataInspector" xml:space="preserve"><value>Inspector de Datos</value></data>
+  <data name="Drawer_ExecutionConsole" xml:space="preserve"><value>Consola de Ejecución</value></data>
   <data name="Drawer_Settings" xml:space="preserve"><value>Ajustes</value></data>
   <data name="Drawer_SettingsToolTip" xml:space="preserve"><value>Configurar ajustes generales, rutas de salida, rendimiento y modelos de IA</value></data>
   <data name="Drawer_HelpResources" xml:space="preserve"><value>AYUDA Y RECURSOS</value></data>
@@ -414,7 +416,9 @@
   <data name="ControlBar_PauseToolTip" xml:space="preserve"><value>Pausar o Reanudar el flujo</value></data>
   <data name="ControlBar_StopToolTip" xml:space="preserve"><value>Detener ejecución (Shift+F5)</value></data>
   <data name="ControlBar_RollbackToolTip" xml:space="preserve"><value>Revertir y deshacer operaciones de la última ejecución (Rollback)</value></data>
+  <data name="ControlBar_ConsoleToolTip" xml:space="preserve"><value>Abrir / Cerrar la Consola de Ejecución</value></data>
   <data name="ControlBar_InspectorToolTip" xml:space="preserve"><value>Abrir / Ocultar Inspector de Datos del Nodo</value></data>
+  <data name="Log_ClosePanelToolTip" xml:space="preserve"><value>Ocultar Consola de Ejecución</value></data>
   <data name="LogLive" xml:space="preserve"><value>⚡ En Vivo</value></data>
   <data name="LogExport" xml:space="preserve"><value>💾 Exportar</value></data>
   <data name="LogClear" xml:space="preserve"><value>🗑 Limpiar</value></data>

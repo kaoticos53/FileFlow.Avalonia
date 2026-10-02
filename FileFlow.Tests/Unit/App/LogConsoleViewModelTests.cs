@@ -218,4 +218,50 @@ public class LogConsoleViewModelTests
         logVm.ErrorCount.Should().Be(1, "pero el latido cuenta lo que llegó: los contadores no son del filtro");
         logVm.TotalLogsCount.Should().Be(1);
     }
+
+    [Fact]
+    public void LogViewModel_IsOpen_ShouldBeTrueByDefault_AndSupportToggleAndCloseCommands()
+    {
+        // Arrange
+        using var logVm = new LogViewModel(new InMemoryLogStore());
+
+        // Assert Default
+        logVm.IsOpen.Should().BeTrue("la consola debe estar visible por omisión al arrancar");
+
+        // Act - Close
+        logVm.ClosePanelCommand.Execute(null);
+        logVm.IsOpen.Should().BeFalse();
+
+        // Act - Open
+        logVm.OpenPanelCommand.Execute(null);
+        logVm.IsOpen.Should().BeTrue();
+
+        // Act - Toggle
+        logVm.TogglePanelCommand.Execute(null);
+        logVm.IsOpen.Should().BeFalse();
+
+        logVm.TogglePanelCommand.Execute(null);
+        logVm.IsOpen.Should().BeTrue();
+    }
+
+    [Fact]
+    public void ControlBarViewModel_ToggleConsoleCommand_ShouldToggleLogConsoleIsOpen()
+    {
+        // Arrange
+        var mainVm = new MainViewModel();
+
+        mainVm.LogConsole.IsOpen.Should().BeTrue();
+
+        // Act - Toggle via ControlBar
+        mainVm.ControlBar.ToggleConsoleCommand.Execute(null);
+
+        // Assert
+        mainVm.LogConsole.IsOpen.Should().BeFalse();
+
+        // Act - Toggle again
+        mainVm.ControlBar.ToggleConsoleCommand.Execute(null);
+
+        // Assert
+        mainVm.LogConsole.IsOpen.Should().BeTrue();
+    }
 }

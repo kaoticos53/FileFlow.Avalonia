@@ -188,6 +188,16 @@
                             </StackPanel>
                         </Button>
 
+                        <!-- Toggle Execution Console Panel Button -->
+                        <Button Command="{Binding ToggleConsoleCommand}"
+                                Classes="toolbar"
+                                ToolTip.Tip="{Binding [ControlBar_ConsoleToolTip], Source={x:Static loc:LocalizationManager.Instance}}">
+                            <StackPanel Orientation="Horizontal" Spacing="{DynamicResource Space2}">
+                                <materialIcons:MaterialIcon Kind="Console" Width="13" Height="13" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding [ConsoleBtn], Source={x:Static loc:LocalizationManager.Instance}}" Classes="caption semiBold" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+
                         <!-- Toggle Inspector Panel Button -->
                         <Button Command="{Binding ToggleInspectorCommand}"
                                 Classes="toolbar"

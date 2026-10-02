@@ -407,6 +407,7 @@ public partial class ControlBarViewModel : ObservableObject, IDisposable
 
     public EditorViewModel Editor => _editorViewModel;
     public NodeInspectorViewModel NodeInspector => _nodeInspectorViewModel;
+    public LogViewModel LogConsole => _logViewModel;
 
     public bool CanUndo => _editorViewModel.CanUndo;
     public bool CanRedo => _editorViewModel.CanRedo;
@@ -434,6 +435,12 @@ public partial class ControlBarViewModel : ObservableObject, IDisposable
     public void ToggleInspector()
     {
         _nodeInspectorViewModel.TogglePanel();
+    }
+
+    [RelayCommand]
+    public void ToggleConsole()
+    {
+        _logViewModel.TogglePanel();
     }
 
     [RelayCommand]

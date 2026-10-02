@@ -36,7 +36,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" MinHeight="200" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="200" MinHeight="60" MaxHeight="550" />
+            <RowDefinition Height="{Binding LogConsole.IsOpen, Converter={StaticResource BooleanToGridLengthConverter}, ConverterParameter=200}" MinHeight="0" MaxHeight="550" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -87,10 +87,13 @@
                       Height="5" 
                       Background="{DynamicResource BgSurfaceBrush}" 
                       ResizeDirection="Rows"
-                      Cursor="SizeNorthSouth" />
+                      Cursor="SizeNorthSouth"
+                      IsVisible="{Binding LogConsole.IsOpen}" />
 
-        <!-- Bottom Realtime Execution Console -->
-        <views:LogView Grid.Row="3" DataContext="{Binding LogConsole}" />
+        <!-- Bottom Realtime Execution Console (Collapsible) -->
+        <views:LogView Grid.Row="3" 
+                       DataContext="{Binding LogConsole}"
+                       IsVisible="{Binding IsOpen}" />
 
         <!-- Bottom Interactive Status Bar -->
         <views:StatusBarView Grid.Row="4" DataContext="{Binding StatusBar}" />
@@ -213,6 +216,13 @@
                             <StackPanel Orientation="Horizontal">
                                 <materialIcons:MaterialIcon Margin="0,0,12,0"  Kind="Magnify" Width="16" Height="16" />
                                 <TextBlock Text="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[Drawer_DataInspector]}" FontSize="{DynamicResource FontSizeBody}" FontWeight="Medium" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button Command="{Binding ControlBar.ToggleConsoleCommand}" HorizontalAlignment="Stretch" Margin="0,2">
+                            <StackPanel Orientation="Horizontal">
+                                <materialIcons:MaterialIcon Margin="0,0,12,0"  Kind="Console" Width="16" Height="16" />
+                                <TextBlock Text="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[Drawer_ExecutionConsole]}" FontSize="{DynamicResource FontSizeBody}" FontWeight="Medium" />
                             </StackPanel>
                         </Button>
 

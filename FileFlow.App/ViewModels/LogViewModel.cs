@@ -39,6 +39,27 @@ public partial class LogViewModel : ObservableObject, IDisposable
     private readonly IDialogService _dialogService;
 
     [ObservableProperty]
+    private bool _isOpen = true;
+
+    [RelayCommand]
+    public void TogglePanel()
+    {
+        IsOpen = !IsOpen;
+    }
+
+    [RelayCommand]
+    public void ClosePanel()
+    {
+        IsOpen = false;
+    }
+
+    [RelayCommand]
+    public void OpenPanel()
+    {
+        IsOpen = true;
+    }
+
+    [ObservableProperty]
     private double _progressPercentage;
 
     [ObservableProperty]

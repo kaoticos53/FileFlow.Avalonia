@@ -107,7 +107,7 @@
                                VerticalAlignment="Center" />
                 </StackPanel>
 
-                <!-- Grupo Derecho: Controles de Depuración (En Vivo, Exportar, Limpiar) -->
+                <!-- Grupo Derecho: Controles de Depuración (En Vivo, Exportar, Limpiar, Ocultar) -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Spacing="{DynamicResource Space3}">
                     <ToggleButton Content="{Binding [LogLive], Source={x:Static loc:LocalizationManager.Instance}}"
                                   Classes="chip"
@@ -123,6 +123,13 @@
                             Classes="toolbar"
                             Command="{Binding ClearLogsCommand}"
                             ToolTip.Tip="{Binding [Log_ClearToolTip], Source={x:Static loc:LocalizationManager.Instance}}" />
+
+                    <Button Command="{Binding ClosePanelCommand}"
+                            Classes="toolbar"
+                            Padding="6,4"
+                            ToolTip.Tip="{Binding [Log_ClosePanelToolTip], Source={x:Static loc:LocalizationManager.Instance}}">
+                        <materialIcons:MaterialIcon Foreground="{DynamicResource TextSecondaryBrush}" Kind="Close" Width="13" Height="13" VerticalAlignment="Center" />
+                    </Button>
                 </StackPanel>
             </Grid>
 

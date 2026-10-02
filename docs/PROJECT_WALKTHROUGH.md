@@ -1,5 +1,42 @@
 # FileFlow Studio - Historial de Cambios y Registro de Implementación (Walkthrough)
 
+## [2026-10-02] - Consola de Depuración Plegable y Ocultable como el Panel de Inspección (Hito 216)
+
+### 🎯 Diagnóstico y Requerimiento del Usuario
+- **El encargo**: «haz que la consola de depuracion se pueda esconder como el panel de inspeccion.»
+- **Análisis y Diseño**:
+  - El panel de inspección de datos (`NodeInspectorPanelView`) dispone de un ciclo de visibilidad completamente integrado: propiedad observable `IsOpen`, comando de alternancia `TogglePanelCommand`, botón de cierre directo en la cabecera `ClosePanelCommand`, botón dedicado en la barra de control (`ControlBarView` Isla 3: Herramientas y Vistas), botón en el menú lateral desplegable (`MainView` Cajón / Drawer: Paneles y Herramientas), y enlace reactivo en la definición de columna (`BooleanToGridLengthConverter`) y `GridSplitter` para colapsar completamente su espacio a 0px sin dejar separadores huérfanos.
+  - La consola de depuración/ejecución (`LogView`) ocupaba una fila fija de 200px en el layout de `MainView` sin posibilidad de plegarse para ganar espacio vertical en el lienzo de trabajo.
+  - Se replicó con exactitud el patrón arquitectónico del inspector para brindar una experiencia de usuario homogénea, simétrica y accesible desde múltiples puntos de control.
+
+### 🛠️ Implementación Técnica
+1. **Estado y Comandos en `LogViewModel.cs`**:
+   - Agregada propiedad reactiva `[ObservableProperty] private bool _isOpen = true;` (abierta por defecto en el arranque).
+   - Comandos MVVM declarados: `[RelayCommand] public void TogglePanel() => IsOpen = !IsOpen;`, `[RelayCommand] public void ClosePanel() => IsOpen = false;`, y `[RelayCommand] public void OpenPanel() => IsOpen = true;`.
+2. **Integración en `ControlBarViewModel.cs` y `ControlBarView.axaml`**:
+   - Expuesta propiedad `public LogViewModel LogConsole => _logViewModel;` y comando `[RelayCommand] public void ToggleConsole() => _logViewModel.TogglePanel();`.
+   - Agregado botón en la Isla 3 (Herramientas y Vistas) de `ControlBarView.axaml` junto al botón de inspector, con icono `Kind="Console"`, texto localizado `[ConsoleBtn]` y tooltip `[ControlBar_ConsoleToolTip]`.
+3. **Botón de Cierre en `LogView.axaml`**:
+   - Incorporado botón de cierre/ocultación en la barra de herramientas derecha de `LogView.axaml` (`ClosePanelCommand` con icono `Kind="Close"` y tooltip `[Log_ClosePanelToolTip]`), permitiendo colapsar la consola con un solo clic directamente desde su propia cabecera.
+4. **Layout y Despliegue en `MainView.axaml`**:
+   - Ajustada la definición de la fila de la consola:
+     `<RowDefinition Height="{Binding LogConsole.IsOpen, Converter={StaticResource BooleanToGridLengthConverter}, ConverterParameter=200}" MinHeight="0" MaxHeight="550" />`
+   - El `GridSplitter` horizontal de redimensionamiento ahora enlaza `IsVisible="{Binding LogConsole.IsOpen}"`, ocultándose limpiamente al cerrar la consola.
+   - `LogView` enlaza `IsVisible="{Binding IsOpen}"`.
+   - Añadido botón en la sección «Paneles y Herramientas» del menú lateral desplegable (Drawer) con icono `Kind="Console"` y texto `[Drawer_ExecutionConsole]`.
+5. **Localización e Internacionalización (i18n)**:
+   - Registradas cadenas de recursos en `Strings.resx` y `Strings.es.resx`: `ConsoleBtn`, `ControlBar_ConsoleToolTip`, `Drawer_ExecutionConsole`, `Log_ClosePanelToolTip`.
+6. **Pruebas y Líneas Base Visuales**:
+   - Añadidas pruebas unitarias en `LogConsoleViewModelTests.cs` validando `IsOpen`, `TogglePanelCommand`, `ClosePanelCommand`, `OpenPanelCommand` y su invocación desde `ControlBarViewModel`.
+   - Actualizadas líneas base de capturas de regresión visual (`AppShellVisualRegressionTests.cs`) con `FILEFLOW_UPDATE_VISUALS=1`.
+
+### 🧪 Validación
+- **Pruebas unitarias de consola (`LogConsoleViewModelTests.cs`)**: 7/7 superadas al 100%.
+- **Pruebas de regresión visual (`AppShellVisualRegressionTests.cs`)**: 12/12 superadas al 100%.
+- **Suite completa de pruebas (`dotnet test FileFlow.slnx`)**: 1.749 pruebas superadas, 0 errores, 1 omitida.
+
+---
+
 ## [2026-10-02] - Fondo de Papel Milimetrado Sutil para el Lienzo de Nodos (Hito 215)
 
 ### 🎯 Diagnóstico y Requerimiento del Usuario
