@@ -10,6 +10,15 @@ Este documento se actualiza al finalizar cada sesión de trabajo para consolidar
 ---
 
 ## 0. Hito más reciente
+- **217. Blindaje de Compilación WebAssembly y Soporte de Símbolos Nativos (2026-10-06)**:
+  - **El encargo**: Consulta sobre cómo ejecutar la aplicación en Web, resolución de errores de compilación de Wasm / bloqueo de DLLs y pantalla de carga infinita en navegador.
+  - **Diagnóstico y solución**:
+    - Se identificaron y terminaron 26 procesos secundarios de `dotnet.exe` que mantenían bloqueados archivos de la carpeta `obj/`.
+    - Se añadió `<WasmAllowUndefinedSymbols>true</WasmAllowUndefinedSymbols>` en `FileFlow.App.Browser.csproj` para permitir la vinculación de símbolos nativos no compilados estáticamente para WebAssembly (Whisper, ONNX Runtime, SQLite).
+    - Se corrigió el bootstrap en `main.js`: sustitución de `runMainAndExit` por `runMain` (evitando la terminación del runtime de Mono WASM tras arrancar) y desvanecimiento/remoción del contenedor `#splash` en `index.html` una vez montado el lienzo interactivo.
+    - Verificada la compilación y generación de distribución con `installer/build-web.ps1` (`FileFlowStudio-Web-v1.0.0.zip`, 27.7 MB).
+  - **Validación**: `dotnet build` Wasm 0 errores; suite de pruebas completa `dotnet test FileFlow.slnx` 1.749 superadas, 0 errores, 1 omitida.
+
 - **216. Consola de Depuración Plegable y Ocultable como el Panel de Inspección (2026-10-02)**:
   - **El encargo**: «haz que la consola de depuracion se pueda esconder como el panel de inspeccion.»
   - **Diagnóstico y diseño**:

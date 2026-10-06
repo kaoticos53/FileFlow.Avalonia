@@ -10,4 +10,10 @@ const dotnetRuntime = await dotnet
 
 const config = dotnetRuntime.getConfig();
 
-await dotnetRuntime.runMainAndExit(config.mainAssemblyName, [window.location.search]);
+await dotnetRuntime.runMain(config.mainAssemblyName, [window.location.search]);
+
+const splash = document.getElementById('splash');
+if (splash) {
+    splash.style.opacity = '0';
+    setTimeout(() => splash.remove(), 500);
+}

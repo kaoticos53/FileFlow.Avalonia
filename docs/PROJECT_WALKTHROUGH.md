@@ -1,5 +1,30 @@
 # FileFlow Studio - Historial de Cambios y Registro de Implementación (Walkthrough)
 
+## [2026-10-06] - Blindaje de Compilación WebAssembly y Soporte de Símbolos Nativos (Hito 217)
+
+### 🎯 Diagnóstico y Requerimiento del Usuario
+- **El encargo**: Consulta sobre cómo ejecutar la aplicación en entorno Web y resolución de errores de compilación/bloqueo de DLLs (`The process cannot access the file ... FileFlow.Sdk.dll` y `undefined symbol: whisper_*` en Wasm linker).
+- **Diagnóstico**:
+  1. Durante la compilación de `FileFlow.App.Browser` (WebAssembly), el enlazador `wasm-ld` / Emscripten requería soporte explícito para librerías nativas con P/Invoke no enlazadas estáticamente (Whisper, ONNX Runtime, SQLite).
+  2. La presencia de procesos huérfanos de compilación en segundo plano retenía bloqueos de archivos en `obj/Debug/net10.0/`.
+
+### 🛠️ Implementación Técnica
+1. **Configuración de Proyecto WebAssembly ([`FileFlow.App.Browser.csproj`](file:///FileFlow.App.Browser/FileFlow.App.Browser.csproj))**:
+   - Agregada la directiva `<WasmAllowUndefinedSymbols>true</WasmAllowUndefinedSymbols>` para permitir la resolución dinámica de símbolos de interoperabilidad nativa en el runtime Mono WebAssembly.
+2. **Ciclo de Vida y Desvanecimiento de Splash en Navegador ([`main.js`](file:///FileFlow.App.Browser/main.js) e [`index.html`](file:///FileFlow.App.Browser/index.html))**:
+   - Sustituido `dotnetRuntime.runMainAndExit` por `dotnetRuntime.runMain` para no abortar el runtime de Mono WebAssembly tras retornar `Program.Main()`.
+   - Incorporada remoción y transición suave (`opacity: 0` y `remove()`) del elemento `#splash` para desocultar el lienzo interactivo de Avalonia en el contenedor `#out`.
+3. **Validación de Empaquetado**:
+   - Verificada la compilación en modo Release con AOT y optimización Emscripten (`-Oz` / `-O2`).
+   - Generación exitosa del paquete WebAssembly mediante [`installer/build-web.ps1`](file:///installer/build-web.ps1) (`FileFlowStudio-Web-v1.0.0.zip`, 27.7 MB).
+
+### 🧪 Validación
+- **Compilación WebAssembly**: 0 errores, 28 advertencias de símbolos permitidos.
+- **Empaquetado WebAssembly (`build-web.ps1`)**: Paquete generado correctamente.
+- **Suite completa de pruebas (`dotnet test FileFlow.slnx`)**: 1.749 superadas, 0 errores, 1 omitida.
+
+---
+
 ## [2026-10-02] - Consola de Depuración Plegable y Ocultable como el Panel de Inspección (Hito 216)
 
 ### 🎯 Diagnóstico y Requerimiento del Usuario
